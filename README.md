@@ -16,8 +16,8 @@ The code automates the creation of the basic AWS infrastructure for a DevOps pro
 * Creates an Internet Gateway for public subnets.
 * Creates a NAT Gateway for private subnets (via Elastic IP).
 * Creates two route tables:
-* * Public: routes traffic through the Internet Gateway.
-* * Private: routes traffic through the NAT Gateway.
+    * Public: routes traffic through the Internet Gateway.
+    * Private: routes traffic through the NAT Gateway.
 * Associates the corresponding subnets with the route tables.
 
 ### ECR (Elastic Container Registry)
