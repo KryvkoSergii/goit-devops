@@ -1,0 +1,31 @@
+# Python artifacts
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.venv/
+
+# Django static and media files
+staticfiles/
+media/
+
+# Environment files
+.env
+*.env
+
+# Docker files
+Dockerfile
+docker-compose.yml
+
+# Git files
+.git
+.gitignore
+
+# OS generated files
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Node modules (if present)
+node_modules/

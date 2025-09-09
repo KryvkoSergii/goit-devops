@@ -10,11 +10,11 @@ def list_create(request: HttpRequest):
             Note.objects.create(title=title, body=body)
         return redirect('notes:list')
     notes = Note.objects.order_by('-created_at')
-    return render(request, 'notes/list.html', {'notes': notes})
+    return render(request, 'list.html', {'notes': notes})
 
 def delete(request: HttpRequest, note_id: int):
     note = get_object_or_404(Note, pk=note_id)
     if request.method == 'POST':
         note.delete()
         return redirect('notes:list')
-    return render(request, 'notes/confirm_delete.html', {'note': note})
+    return render(request, 'confirm_delete.html', {'note': note})
