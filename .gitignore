@@ -1,5 +1,10 @@
 # Local .terraform directories
-**/.terraform/*
+.terraform
+django
+nginx
+pg_data
+.env
+*.env
 
 # Terraform state files
 *.tfstate

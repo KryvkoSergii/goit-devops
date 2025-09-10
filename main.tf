@@ -18,17 +18,28 @@ module "vpc" {
 }
 
 module "ecr" {
-  source      = "./modules/ecr/"
-  ecr_name    = "lesson-7-ecr"
+  source       = "./modules/ecr/"
+  ecr_name     = "lesson-7-ecr"
   scan_on_push = true
 }
 
 module "eks" {
-  source          = "./modules/eks"          
-  cluster_name    = "eks-cluster-lesson-7"            
-  subnet_ids      = module.vpc.private_subnets     
-  instance_type   = "t3.micro"                    
-  desired_size    = 1
-  max_size        = 2
-  min_size        = 1
+  source        = "./modules/eks"
+  cluster_name  = "eks-cluster-lesson-7"
+  subnet_ids    = module.vpc.private_subnets
+  instance_type = "t3.small"
+  desired_size  = 1
+  max_size      = 2
+  min_size      = 1
+}
+
+module "rds" {
+  source            = "./modules/rds/"
+  postgres_username = "django_user"
+  postgres_password = "pass9764gd"
+  postgres_db_name  = "django_db"
+  subnets    = module.vpc.private_subnets
+  availability_zone = "eu-north-1a"
+  vpc_id     = module.vpc.vpc_id
+  allowed_cidr_block = "0.0.0.0/0"
 }

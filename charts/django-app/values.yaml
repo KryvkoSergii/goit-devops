@@ -1,0 +1,26 @@
+image:
+  repository: 307987835663.dkr.ecr.eu-north-1.amazonaws.com/lesson-7-ecr
+  tag: 0.0.1
+  pullPolicy: IfNotPresent
+
+service:
+  type: LoadBalancer
+  port: 8000
+
+namespace: default
+
+hpa:
+  averageUtilization: 70
+  resource: cpu
+  minReplicas: 2
+  maxReplicas: 6
+
+ingress:
+  enabled: false
+
+config:
+  POSTGRES_PORT: 5432
+  POSTGRES_HOST: postgres.chocyeik2442.eu-north-1.rds.amazonaws.com
+  POSTGRES_USER: django_user
+  POSTGRES_NAME: django_db
+  POSTGRES_PASSWORD: pass9764gd

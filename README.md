@@ -1,9 +1,9 @@
-# GoIT DevOps. IaC (Terraform)
+# GoIT DevOps. IaC (Terraform), Kubernetes (EKS), Helm
 
 ## Purpose:
-Automate cloud infrastructure deployment for DevOps projects on AWS using Terraform.
+Automate cloud infrastructure deployment for django projects to AWS EKS using Terraform and Helm Charts.
 
-### General structure
+### General structure Terraform
 The code automates the creation of the basic AWS infrastructure for a DevOps project using a modular approach.
 
 ### S3 Backend
@@ -24,16 +24,28 @@ The code automates the creation of the basic AWS infrastructure for a DevOps pro
 * Creates an ECR repository to store Docker images.
 * You can enable automatic image scanning when loading.
 
+### EKS (Elastic Kubernetes Service)
+* Sets up networking and IAM roles required for EKS operation.
+* Provisions an EKS cluster for container orchestration.
+* Configures worker nodes and node groups for scalable workloads.
+
 ### Outputs
 Displays the identifiers of the created resources: VPC, subnets, Internet Gateway, ECR repository, S3 bucket, DynamoDB table.
+
+## Helm Charts
+* Deploys django [app](307987835663.dkr.ecr.eu-north-1.amazonaws.com/lesson-7-ecr:0.0.1) to EKS
+* Adds HPA to django app
 
 ## Prerequisites
 
 - [Terraform](https://www.terraform.io/downloads.html) installed
 - [AWSCLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html) installed
 - Properly configured AWS provider credentials
+- [kubectl]
+- Properly configuret kubectl
+- [helm](https://helm.sh/)
 
-## AWS CLI Commands
+## CLI Commands
 
 ### Configure profile
 
@@ -44,6 +56,50 @@ aws configure
 With profile
 ```sh
 aws configure --profile <name>
+```
+
+### ECR
+
+Get data about repository 
+```sh
+aws ecr describe-repositories --repository-names <repo> --region <region>
+```
+
+Login to ECR
+```sh 
+docker login <arrount-id>.dkr.ecr.<region>.amazonaws.com --username AWS --password $(aws ecr get-login-password --region <region>)
+```
+
+Docker tag
+```sh
+docker tag <repo>:<version> <arrount-id>.dkr.ecr.<region>.amazonaws.com/<repo>:<version>
+```
+
+Docker push
+```sh
+docker push <arrount-id>.dkr.ecr.<region>.amazonaws.com/<repo>:<version>
+```
+
+### Kubectl
+Update config
+```sh
+aws eks update-kubeconfig --region <region> --name <claster-name> --profile <profile>
+```
+To deploy database into AWS EKS
+```sh
+kubectl apply -f .\db\postgres-secret
+kubectl apply -f .\db\postgres-deploy.yaml
+```
+!May require additional steps
+
+### Helm
+To instll django-app navidate .\charts\django-app and run
+```sh
+helm install django-app .
+```
+To update
+```sh
+helm upgrade django-app .
 ```
 
 ## Common Terraform Commands

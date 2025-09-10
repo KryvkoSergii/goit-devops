@@ -8,7 +8,12 @@ output "dynamodb_table_name" {
   value       = module.s3_backend.dynamodb_table_name
 }
 
-# output "ECR_repository_url" {
-#   description = "URL of the created ECR repository"
-#   value       = module.ecr.repository_url
-# }
+output "ECR_repository_url" {
+  description = "URL of the created ECR repository"
+  value       = module.ecr.repository_url
+}
+
+output "postgres_endpoint" {
+  description = "PostgreSQL RDS instance endpoint"
+  value       = module.rds.db_instance_endpoint
+}
