@@ -17,3 +17,11 @@ output "postgres_endpoint" {
   description = "PostgreSQL RDS instance endpoint"
   value       = module.rds.db_instance_endpoint
 }
+
+output "jenkins_release" {
+  value = module.jenkins.jenkins_release_name
+}
+
+output "jenkins_namespace" {
+  value = module.jenkins.jenkins_namespace
+}

@@ -3,7 +3,7 @@ resource "aws_db_subnet_group" "db" {
   subnet_ids  = var.subnets
   description = "Subnet group for Postgres RDS instance"
   tags = {
-    Environment = "lesson-7"
+    Environment = "lesson-9"
   }
 }
 
@@ -26,7 +26,7 @@ resource "aws_security_group" "db_sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
   tags = {
-    Environment = "lesson-7"
+    Environment = "lesson-9"
   }
 }
 
@@ -46,6 +46,6 @@ resource "aws_db_instance" "postgres" {
   publicly_accessible    = false
   skip_final_snapshot    = true
   tags = {
-    Environment = "lesson-7"
+    Environment = "lesson-9"
   }
 }

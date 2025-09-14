@@ -33,7 +33,7 @@ The code automates the creation of the basic AWS infrastructure for a DevOps pro
 Displays the identifiers of the created resources: VPC, subnets, Internet Gateway, ECR repository, S3 bucket, DynamoDB table.
 
 ## Helm Charts
-* Deploys django [app](307987835663.dkr.ecr.eu-north-1.amazonaws.com/lesson-7-ecr:0.0.1) to EKS
+* Deploys django [app](307987835663.dkr.ecr.eu-north-1.amazonaws.com/lesson-9-ecr:0.0.1) to EKS
 * Adds HPA to django app
 
 ## Prerequisites
