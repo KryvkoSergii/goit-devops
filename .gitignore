@@ -1,0 +1,38 @@
+# Django
+*.pyc
+__pycache__/
+db.sqlite3
+*.log
+*.pot
+*.py[cod]
+*.swp
+*.swo
+*.env
+.env.*
+local_settings.py
+media/
+staticfiles/
+static/
+.DS_Store
+
+# Docker
+*.pid
+*.seed
+*.bak
+*.tmp
+*.orig
+docker-compose.override.yml
+docker-compose.local.yml
+
+# VSCode
+.vscode/
+
+# System
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Git
+.git/
+.venv
+pg_data/
