@@ -16,11 +16,13 @@ variable "oidc_provider_url" {
 variable "github_pat" {
   description = "GitHub Personal Access Token"
   type        = string
+  sensitive = true
 }
 
 variable "github_user" {
   description = "GitHub username"
   type        = string
+  sensitive = true
 }
 
 variable "github_repo_url" {

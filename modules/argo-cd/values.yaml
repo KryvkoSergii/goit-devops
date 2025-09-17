@@ -1,4 +1,4 @@
-# server:
-#   service:
-#     type: LoadBalancer
-#     port: 443
+server:
+  service:
+    type: LoadBalancer
+    port: 443

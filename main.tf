@@ -89,9 +89,11 @@ module "jenkins" {
   depends_on = [module.eks]
 }
 
-# module "argo_cd" {
-#   source        = "./modules/argo-cd/"
-#   namespace     = "argocd"
-#   name          = "argo-cd"
-#   chart_version = "5.46.4"
-# }
+module "argo_cd" {
+  source        = "./modules/argo-cd/"
+  namespace     = "argocd"
+  name          = "argo-cd"
+  chart_version = "5.46.4"
+  github_pat        = var.github_pat
+  github_user       = var.github_user
+}
