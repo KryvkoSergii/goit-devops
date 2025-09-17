@@ -60,6 +60,7 @@ spec:
                     withCredentials([usernamePassword(credentialsId: 'github-token', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PAT')]) {
                         sh '''
               git clone https://github.com/KryvkoSergii/goit-devops.git
+              git checkout lesson-9
               cd goit-devops/charts/django-app
 
               sed -i "s/tag: .*/tag: $IMAGE_TAG/" values.yaml
@@ -69,7 +70,7 @@ spec:
 
               git add values.yaml
               git commit -m "Update image tag to $IMAGE_TAG"
-              git push origin main
+              git push origin lesson-9
             '''
                     }
                 }
