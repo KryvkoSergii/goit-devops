@@ -53,7 +53,6 @@ spec:
         }
       }
     }
-  }
 
   stage('Update Chart Tag in Git') {
       steps {
