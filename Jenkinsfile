@@ -61,7 +61,7 @@ spec:
           withCredentials([usernamePassword(credentialsId: 'github-token', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PAT')]) {
             sh '''
               git clone https://github.com/KryvkoSergii/goit-devops.git
-              cd goit-devops/django-chart
+              cd goit-devops/charts/django-app
 
               sed -i "s/tag: .*/tag: $IMAGE_TAG/" values.yaml
 
