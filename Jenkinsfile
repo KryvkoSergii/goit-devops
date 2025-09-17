@@ -43,7 +43,7 @@ spec:
                     sh '''
             REPO_DIR="$(pwd)"
             /kaniko/executor \\
-              --context "${REPO_DIR}" \\
+              --context "${REPO_DIR}/django" \\
               --dockerfile "${REPO_DIR}/django/Dockerfile" \\
               --destination="$ECR_REGISTRY/$IMAGE_NAME:$IMAGE_TAG" \\
               --cache=true \\
