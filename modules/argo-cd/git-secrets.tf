@@ -15,4 +15,6 @@ resource "kubernetes_secret" "argocd_repo" {
   }
 
   type = "Opaque"
+
+  depends_on = [ helm_release.argo_cd ]
 }

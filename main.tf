@@ -2,12 +2,6 @@ provider "aws" {
   region = "eu-north-1"
 }
 
-module "s3_backend" {
-  source      = "./modules/s3-backend/"
-  bucket_name = "goit-devops-terraform-state-bucket"
-  table_name  = "goit-devops-terraform-locks"
-}
-
 module "vpc" {
   source             = "./modules/vpc/"
   vpc_cidr_block     = "10.0.0.0/16"
@@ -94,6 +88,11 @@ module "argo_cd" {
   namespace     = "argocd"
   name          = "argo-cd"
   chart_version = "5.46.4"
-  github_pat        = var.github_pat
-  github_user       = var.github_user
+  github_pat    = var.github_pat
+  github_user   = var.github_user
+
+  providers = {
+    helm       = helm.eks
+    kubernetes = kubernetes.eks
+  }
 }
