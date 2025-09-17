@@ -68,6 +68,17 @@ Update config
 ```sh
 aws eks update-kubeconfig --region <region> --name <claster-name> --profile <profile>
 ```
+Get jenkins UI on 8080 port
+```sh
+kubectl get pod -n jenkins
+kubectl port-forward jenkins-0 8080:8080 -n jenkins
+```
+
+### Argo CD
+Get password, username `admin`
+```sh
+kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
+```
 
 ## Common Terraform Commands
 
