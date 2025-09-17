@@ -70,8 +70,6 @@ spec:
               git add values.yaml
               git commit -m "Update image tag to $IMAGE_TAG"
 
-              git remote set-url origin "https://${GITHUB_USER}:${GITHUB_PAT}@github.com/KryvkoSergii/goit-devops.git"
-
               git push origin HEAD:lesson-9
             '''
                     }
