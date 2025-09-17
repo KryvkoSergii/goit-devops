@@ -3,7 +3,7 @@ resource "aws_route_table" "public" {
 
   tags = {
     Name        = "${var.vpc_name}-public-rt"
-    Environment = "lesson-5"
+    Environment = "lesson-9"
   }
 }
 
@@ -24,14 +24,14 @@ resource "aws_route_table" "private" {
 
   tags = {
     Name        = "${var.vpc_name}-private-rt"
-    Environment = "lesson-5"
+    Environment = "lesson-9"
   }
 }
 
 resource "aws_route" "private_nat" {
   route_table_id         = aws_route_table.private.id
   destination_cidr_block = "0.0.0.0/0"
-  gateway_id             = aws_nat_gateway.nat.id
+  nat_gateway_id         = aws_nat_gateway.nat.id
 }
 
 resource "aws_route_table_association" "private" {
