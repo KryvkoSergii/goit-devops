@@ -59,8 +59,7 @@ spec:
                 container('git') {
                     withCredentials([usernamePassword(credentialsId: 'github-token', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PAT')]) {
                         sh '''
-              git clone https://github.com/KryvkoSergii/goit-devops.git
-              git checkout lesson-9
+              git clone --branch lesson-9 --depth 1 https://github.com/KryvkoSergii/goit-devops.git goit-devops
               cd goit-devops/charts/django-app
 
               sed -i "s/tag: .*/tag: $IMAGE_TAG/" values.yaml
