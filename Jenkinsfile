@@ -1,7 +1,7 @@
 pipeline {
-  agent {
-    kubernetes {
-      yaml """
+    agent {
+        kubernetes {
+            yaml """
 apiVersion: v1
 kind: Pod
 metadata:
@@ -24,23 +24,23 @@ spec:
       args:
         - 99d
 """
+        }
     }
-  }
 
-  environment {
-    ECR_REGISTRY = "307987835663.dkr.ecr.eu-north-1.amazonaws.com"
-    IMAGE_NAME   = "django-app"
-    IMAGE_TAG    = "1.0.${BUILD_NUMBER}"
+    environment {
+        ECR_REGISTRY = "307987835663.dkr.ecr.eu-north-1.amazonaws.com"
+        IMAGE_NAME = "django-app"
+        IMAGE_TAG = "1.0.${BUILD_NUMBER}"
 
-    COMMIT_EMAIL = "jenkins@localhost"
-    COMMIT_NAME  = "jenkins"
-  }
+        COMMIT_EMAIL = "jenkins@localhost"
+        COMMIT_NAME = "jenkins"
+    }
 
-  stages {
-    stage('Build & Push Docker Image') {
-      steps {
-        container('kaniko') {
-          sh '''
+    stages {
+        stage('Build & Push Docker Image') {
+            steps {
+                container('kaniko') {
+                    sh '''
             REPO_DIR="$(pwd)"
             /kaniko/executor \\
               --context "${REPO_DIR}" \\
@@ -50,15 +50,15 @@ spec:
               --insecure \\
               --skip-tls-verify
           '''
+                }
+            }
         }
-      }
-    }
 
-  stage('Update Chart Tag in Git') {
-      steps {
-        container('git') {
-          withCredentials([usernamePassword(credentialsId: 'github-token', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PAT')]) {
-            sh '''
+        stage('Update Chart Tag in Git') {
+            steps {
+                container('git') {
+                    withCredentials([usernamePassword(credentialsId: 'github-token', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PAT')]) {
+                        sh '''
               git clone https://github.com/KryvkoSergii/goit-devops.git
               cd goit-devops/charts/django-app
 
@@ -71,8 +71,9 @@ spec:
               git commit -m "Update image tag to $IMAGE_TAG"
               git push origin main
             '''
-          }
+                    }
+                }
+            }
         }
-      }
-}
+    }
 }
