@@ -75,6 +75,11 @@ kubectl port-forward jenkins-0 8080:8080 -n jenkins
 ```
 
 ### Argo CD
+Get ArgoCD UI on 8443 port
+```sh
+kubectl get pods -n argocd
+kubectl port-forward -n argocd svc/argo-cd-argocd-server 8443:443
+```
 Get password, username `admin`
 ```sh
 kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
