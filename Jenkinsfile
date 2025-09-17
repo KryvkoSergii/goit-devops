@@ -24,7 +24,7 @@ spec:
   environment {
     ECR_REGISTRY = "307987835663.dkr.ecr.eu-north-1.amazonaws.com"
     IMAGE_NAME   = "django-app"
-    IMAGE_TAG    = "latest"
+    IMAGE_TAG    = "0.0.1"
   }
 
   stages {
