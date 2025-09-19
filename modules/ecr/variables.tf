@@ -8,3 +8,8 @@ variable "scan_on_push" {
   type        = bool
   default     = false
 }
+
+variable "tags" {
+  type    = map(string)
+  default = {}
+}

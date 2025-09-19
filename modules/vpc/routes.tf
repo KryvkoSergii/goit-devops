@@ -1,10 +1,7 @@
 resource "aws_route_table" "public" {
   vpc_id = aws_vpc.main.id
 
-  tags = {
-    Name        = "${var.vpc_name}-public-rt"
-    Environment = "lesson-9"
-  }
+  tags = merge(var.tags, { Name = "${var.vpc_name}-public-rt" })
 }
 
 resource "aws_route" "public_internet" {
@@ -22,10 +19,7 @@ resource "aws_route_table_association" "public" {
 resource "aws_route_table" "private" {
   vpc_id = aws_vpc.main.id
 
-  tags = {
-    Name        = "${var.vpc_name}-private-rt"
-    Environment = "lesson-9"
-  }
+  tags = merge(var.tags, { Name = "${var.vpc_name}-private-rt" })
 }
 
 resource "aws_route" "private_nat" {

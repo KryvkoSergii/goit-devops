@@ -37,3 +37,8 @@ variable "min_size" {
   description = "Minimum number of worker nodes"
   default     = 1
 }
+
+variable "tags" {
+  type    = map(string)
+  default = {}
+}

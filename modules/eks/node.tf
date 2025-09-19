@@ -15,6 +15,8 @@ resource "aws_iam_role" "nodes" {
   ]
 }
 POLICY
+
+  tags = var.tags
 }
 
 resource "aws_iam_role_policy_attachment" "amazon_eks_worker_node_policy" {
@@ -34,9 +36,9 @@ resource "aws_iam_role_policy_attachment" "amazon_ec2_container_registry_read_on
 
 resource "aws_eks_node_group" "general" {
   cluster_name = aws_eks_cluster.eks.name
-  
+
   node_group_name = "general"
-  
+
   node_role_arn = aws_iam_role.nodes.arn
 
   subnet_ids = var.subnet_ids
@@ -68,4 +70,6 @@ resource "aws_eks_node_group" "general" {
   lifecycle {
     ignore_changes = [scaling_config[0].desired_size]
   }
+
+  tags = var.tags
 }

@@ -22,3 +22,8 @@ variable "vpc_name" {
   description = "VPC name"
   type        = string
 }
+
+variable "tags" {
+  type    = map(string)
+  default = {}
+}

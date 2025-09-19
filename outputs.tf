@@ -22,8 +22,8 @@ output "jenkins_namespace" {
   value = module.jenkins.jenkins_namespace
 }
 
-#-------------RDS-----------------
+#-------------DB-----------------
 output "postgres_endpoint" {
-  description = "PostgreSQL RDS instance endpoint"
+  description = "DB instance endpoint"
   value       = module.rds.db_instance_endpoint
 }

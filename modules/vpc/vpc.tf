@@ -3,23 +3,17 @@ resource "aws_vpc" "main" {
   enable_dns_support   = true
   enable_dns_hostnames = true
 
-  tags = {
-    Name = "${var.vpc_name}-vpc"
-    Environment = "lesson-9"
-  }
+  tags = merge(var.tags, { Name = "${var.vpc_name}-vpc" })
 }
 
 resource "aws_subnet" "public" {
-  count                   = length(var.public_subnets)  
+  count                   = length(var.public_subnets)
   vpc_id                  = aws_vpc.main.id
   cidr_block              = var.public_subnets[count.index]
   availability_zone       = var.availability_zones[count.index]
   map_public_ip_on_launch = true
 
-  tags = {
-    Name = "${var.vpc_name}-public-subnet-${count.index + 1}"
-    Environment = "lesson-9" 
-  }
+  tags = merge(var.tags, { Name = "${var.vpc_name}-public-subnet-${count.index + 1}" })
 }
 
 resource "aws_subnet" "private" {
@@ -28,33 +22,25 @@ resource "aws_subnet" "private" {
   cidr_block        = var.private_subnets[count.index]
   availability_zone = var.availability_zones[count.index]
 
-  tags = {
-    Name = "${var.vpc_name}-private-subnet-${count.index + 1}"
-    Environment = "lesson-9"
-  }
+  tags = merge(var.tags, { Name = "${var.vpc_name}-private-subnet-${count.index + 1}" })
 }
 
 resource "aws_internet_gateway" "igw" {
   vpc_id = aws_vpc.main.id
 
-  tags = {
-    Name = "${var.vpc_name}-igw"
-    Environment = "lesson-9"
-  }
+  tags = merge(var.tags, { Name = "${var.vpc_name}-igw" })
 }
 
 resource "aws_eip" "nat" {
   domain = "vpc"
+  tags   = var.tags
 }
 
 resource "aws_nat_gateway" "nat" {
   subnet_id     = aws_subnet.public[0].id
   allocation_id = aws_eip.nat.id
 
-  tags = {
-    Name = "${var.vpc_name}-igw"
-    Environment = "lesson-9"
-  }
+  tags = merge(var.tags, { Name = "${var.vpc_name}-igw" })
 
   depends_on = [aws_internet_gateway.igw]
 }

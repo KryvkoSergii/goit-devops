@@ -4,6 +4,8 @@ resource "aws_iam_openid_connect_provider" "oidc" {
   thumbprint_list = ["9e99a48a9960b14926bb7f3b02e22da0ecd6c6f9"]
 
   depends_on = [ aws_eks_cluster.eks ]
+
+  tags = var.tags
 }
 
 resource "aws_iam_role" "ebs_csi_irsa_role" {
@@ -26,6 +28,8 @@ resource "aws_iam_role" "ebs_csi_irsa_role" {
   })
 
   depends_on = [ aws_eks_cluster.eks ]
+
+  tags = var.tags
 }
 
 resource "aws_iam_role_policy_attachment" "ebs_irsa_policy" {
@@ -47,4 +51,6 @@ resource "aws_eks_addon" "ebs_csi_driver" {
     aws_iam_openid_connect_provider.oidc,
     aws_iam_role_policy_attachment.ebs_irsa_policy
   ]
+
+  tags = var.tags
 }

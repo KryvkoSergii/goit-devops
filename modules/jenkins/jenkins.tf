@@ -34,6 +34,8 @@ resource "aws_iam_role" "jenkins_kaniko_role" {
       }
     ]
   })
+
+  tags = var.tags
 }
 
 resource "aws_iam_role_policy" "jenkins_ecr_policy" {

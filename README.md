@@ -40,6 +40,10 @@ The code automates the creation of the basic AWS infrastructure for a DevOps pro
 * Pull Docker image from ECR
 * Deploy to EKS
 
+### RDS/Avrora
+* creates Classic RDS Postgres or Avrora depending on flag `use_avrora`
+* provides `parameters` for DB configuration
+
 ## Prerequisites
 
 - [Terraform](https://www.terraform.io/downloads.html) installed
@@ -61,6 +65,31 @@ aws configure
 With profile
 ```sh
 aws configure --profile <name>
+```
+
+get RDS DB endpoint
+```sh
+aws rds describe-db-instances --profile <profile> --query "DBInstances[0].Endpoint" --output json
+``` 
+
+get Avrora endpoint 
+```sh 
+aws rds describe-db-clusters \
+  --profile <profile> \
+  --query "DBClusters[].{id:DBClusterIdentifier, writer:Endpoint, reader:ReaderEndpoint, port:Port}" \
+  --output table
+```
+
+or get from terraform ouput
+```sh
+Outputs:
+
+ECR_repository_url = <repository url>
+jenkins_namespace = "jenkins"
+jenkins_release = "jenkins"
+oidc_provider_arn = <oidc provider ARN>
+oidc_provider_url = <oidc provider URL>
+postgres_endpoint = "<host>:5432"
 ```
 
 ### Kubectl
