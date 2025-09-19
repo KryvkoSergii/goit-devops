@@ -1,4 +1,4 @@
-# GoIT DevOps. RDS/Avrora + Jenkins + ArgoCD + EKS + Helm + Terraform
+# GoIT DevOps. RDS/Aurora + Jenkins + ArgoCD + EKS + Helm + Terraform
 
 ## Purpose:
 Automate cloud infrastructure deployment for CI/CD using jenkins and allocating resources in AWS EKS. 
@@ -40,8 +40,8 @@ The code automates the creation of the basic AWS infrastructure for a DevOps pro
 * Pull Docker image from ECR
 * Deploy to EKS
 
-### RDS/Avrora
-* creates Classic RDS Postgres or Avrora depending on flag `use_avrora`
+### RDS/Aurora
+* creates Classic RDS Postgres or Aurora depending on flag `use_aurora`
 * provides `parameters` for DB configuration
 
 ## Prerequisites
@@ -72,7 +72,7 @@ get RDS DB endpoint
 aws rds describe-db-instances --profile <profile> --query "DBInstances[0].Endpoint" --output json
 ``` 
 
-get Avrora endpoint 
+get Aurora endpoint 
 ```sh 
 aws rds describe-db-clusters \
   --profile <profile> \
