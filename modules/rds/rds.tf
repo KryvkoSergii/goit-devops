@@ -15,6 +15,8 @@ resource "aws_db_instance" "standard" {
   backup_retention_period = var.backup_retention_period
   parameter_group_name    = aws_db_parameter_group.standard[0].name
 
+  skip_final_snapshot = true
+
   tags = var.tags
 }
 
