@@ -1,4 +1,4 @@
-# GoIT DevOps. Agro CD + CD
+# GoIT DevOps. RDS/Avrora + Jenkins + ArgoCD + EKS + Helm + Terraform
 
 ## Purpose:
 Automate cloud infrastructure deployment for CI/CD using jenkins and allocating resources in AWS EKS. 
