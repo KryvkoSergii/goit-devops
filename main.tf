@@ -79,29 +79,6 @@ provider "helm" {
   }
 }
 
-module "secrets_consumer" {
-  count             = var.enable_platform ? 1 : 0
-  source            = "./modules/secrets-consumer"
-  cluster_name      = module.eks.eks_cluster_name
-  oidc_provider_arn = module.eks.oidc_provider_arn
-  oidc_provider_url = module.eks.oidc_provider_url
-  aws_region        = local.region
-
-  secret_arns = [
-    module.secrets_provider[0].db_secret_arn,
-    module.secrets_provider[0].github_secret_arn
-  ]
-
-  providers = {
-    helm       = helm.eks
-    kubernetes = kubernetes.eks
-  }
-
-  tags = local.tags
-
-  depends_on = [module.eks]
-}
-
 module "rds" {
   count  = var.enable_platform ? 1 : 0
   source = "./modules/rds/"
@@ -141,14 +118,14 @@ module "jenkins" {
   cluster_name              = module.eks.eks_cluster_name
   oidc_provider_arn         = module.eks.oidc_provider_arn
   oidc_provider_url         = module.eks.oidc_provider_url
-  cluster_secret_store_name = module.secrets_consumer[0].cluster_secret_store_name
+  github_secret_arn = module.secrets_provider[0].github_secret_arn
 
   providers = {
     helm       = helm.eks
     kubernetes = kubernetes.eks
   }
 
-  depends_on = [module.eks, module.secrets_consumer[0]]
+  depends_on = [module.eks]
 
   tags = local.tags
 }
@@ -161,12 +138,13 @@ module "argo_cd" {
   chart_version             = "5.46.4"
   db_host                   = module.rds[0].db_host
   app_image_repo            = module.ecr.repository_url
-  cluster_secret_store_name = module.secrets_consumer[0].cluster_secret_store_name
+  github_secret_arn = module.secrets_provider[0].github_secret_arn
+  db_secret_arn = module.secrets_provider[0].db_secret_arn
 
   providers = {
     helm       = helm.eks
     kubernetes = kubernetes.eks
   }
 
-  depends_on = [module.eks, module.secrets_consumer[0]]
+  depends_on = [module.eks]
 }

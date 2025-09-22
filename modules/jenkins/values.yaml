@@ -26,18 +26,12 @@ controller:
 
   containerEnv:
     - name: GITHUB_USER
-      valueFrom: { secretKeyRef: { name: jenkins-shared, key: GITHUB_USER } }
+      valueFrom: { secretKeyRef: { name: jenkins-shared, key: user } }
     - name: GITHUB_PAT
-      valueFrom: { secretKeyRef: { name: jenkins-shared, key: GITHUB_PAT } }
+      valueFrom: { secretKeyRef: { name: jenkins-shared, key: pat } }
     - name: GITHUB_REPO_URL
-      valueFrom: { secretKeyRef: { name: jenkins-shared, key: GITHUB_REPO_URL } }
-    - name: DB_USERNAME
-      valueFrom: { secretKeyRef: { name: jenkins-shared, key: DB_USERNAME } }
-    - name: DB_PASSWORD
-      valueFrom: { secretKeyRef: { name: jenkins-shared, key: DB_PASSWORD } }
-    - name: DB_NAME
-      valueFrom: { secretKeyRef: { name: jenkins-shared, key: DB_NAME } }
-
+      valueFrom: { secretKeyRef: { name: jenkins-shared, key: repo_url} }
+      
   installPlugins:
     - kubernetes:latest
     - workflow-aggregator:latest

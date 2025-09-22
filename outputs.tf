@@ -15,11 +15,11 @@ output "oidc_provider_url" {
 
 #-------------Jenkins-----------------
 output "jenkins_release" {
-  value = var.enable_platform ?  module.jenkins.jenkins_release_name : "none"
+  value = var.enable_platform ?  module.jenkins[0].jenkins_release_name : "none"
 }
 
 output "jenkins_namespace" {
-  value = var.enable_platform ? module.jenkins.jenkins_namespace : "none"
+  value = var.enable_platform ? module.jenkins[0].jenkins_namespace : "none"
 }
 
 #-------------DB-----------------

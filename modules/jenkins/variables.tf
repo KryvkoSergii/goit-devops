@@ -23,6 +23,6 @@ variable "tags" {
   default = {}
 }
 
-variable "cluster_secret_store_name" {
+variable "github_secret_arn" {
   type = string
 }

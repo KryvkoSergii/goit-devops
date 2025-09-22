@@ -26,6 +26,10 @@ variable "app_image_repo" {
   type = string
 }
 
-variable "cluster_secret_store_name" {
+variable "github_secret_arn" {
+  type = string
+}
+
+variable "db_secret_arn" {
   type = string
 }
