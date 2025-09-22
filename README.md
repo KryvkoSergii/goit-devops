@@ -52,6 +52,8 @@ The code automates the creation of the basic AWS infrastructure for a DevOps pro
 - [kubectl]
 - Properly configuret kubectl
 - Before start provision infrastructure navigate to `init-s3`, perform `terraform init` and `terraform apply`. This will create S3 and DynamoDB table for backend
+- Create EKS first using CLI `terraform apply -var-file="<vars>.tfvars" -var="enable_platform=false"`
+- Provision all stack using `terraform apply -var-file="<vars>.tfvars" -var="enable_platform=true"`
 
 
 ## CLI Commands
