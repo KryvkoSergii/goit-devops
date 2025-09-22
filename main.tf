@@ -148,3 +148,14 @@ module "argo_cd" {
 
   depends_on = [module.eks]
 }
+
+module "monitoring" {
+  count                     = var.enable_platform ? 1 : 0
+  source = "./modules/monitoring"
+  providers = {
+    helm       = helm.eks
+    kubernetes = kubernetes.eks
+  }
+  depends_on = [ module.eks ]
+  tags = local.tags
+}
