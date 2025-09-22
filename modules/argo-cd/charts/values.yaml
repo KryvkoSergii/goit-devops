@@ -1,6 +1,6 @@
 applications:
   - name: django-app
-    namespace: default
+    namespace: argocd
     project: default
     source:
       repoURL: https://github.com/KryvkoSergii/goit-devops.git
@@ -11,7 +11,7 @@ applications:
           - values.yaml
     destination:
       server: https://kubernetes.default.svc
-      namespace: default
+      namespace: argocd
     syncPolicy:
       automated:
         prune: true
