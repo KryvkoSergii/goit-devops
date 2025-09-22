@@ -19,7 +19,16 @@ resource "helm_release" "argo_apps" {
   create_namespace = false
 
   values = [
-    file("${path.module}/values.yaml")
+    file("${path.module}/values.yaml"),
+    yamlencode({
+      config = {
+        POSTGRES_HOST = var.db_host
+      },
+      image = {
+        repository = var.app_image_repo
+      }
+    })
   ]
+
   depends_on = [helm_release.argo_cd]
 }

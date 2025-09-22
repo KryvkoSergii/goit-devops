@@ -3,9 +3,9 @@ resource "aws_rds_cluster" "aurora" {
   cluster_identifier              = "${var.name}-cluster"
   engine                          = var.engine_cluster
   engine_version                  = var.engine_version_cluster
-  master_username                 = var.username
-  master_password                 = var.password
-  database_name                   = var.db_name
+  master_username                 = jsondecode(data.aws_secretsmanager_secret_version.db-rds.secret_string).username
+  master_password                 = jsondecode(data.aws_secretsmanager_secret_version.db-rds.secret_string).password
+  database_name                   = jsondecode(data.aws_secretsmanager_secret_version.db-rds.secret_string).name
   db_subnet_group_name            = aws_db_subnet_group.default.name
   vpc_security_group_ids          = [aws_security_group.rds.id]
   backup_retention_period         = var.backup_retention_period
@@ -14,6 +14,8 @@ resource "aws_rds_cluster" "aurora" {
   db_cluster_parameter_group_name = aws_rds_cluster_parameter_group.aurora[0].name
 
   tags = var.tags
+
+  depends_on = [ data.aws_secretsmanager_secret_version.db-rds ]
 }
 
 resource "aws_rds_cluster_instance" "aurora_writer" {

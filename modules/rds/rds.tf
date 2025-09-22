@@ -5,9 +5,9 @@ resource "aws_db_instance" "standard" {
   engine_version          = var.engine_version
   instance_class          = var.instance_class
   allocated_storage       = var.allocated_storage
-  db_name                 = var.db_name
-  username                = var.username
-  password                = var.password
+  db_name                 = jsondecode(data.aws_secretsmanager_secret_version.db-rds.secret_string).name
+  username                = jsondecode(data.aws_secretsmanager_secret_version.db-rds.secret_string).username
+  password                = jsondecode(data.aws_secretsmanager_secret_version.db-rds.secret_string).password
   db_subnet_group_name    = aws_db_subnet_group.default.name
   vpc_security_group_ids  = [aws_security_group.rds.id]
   multi_az                = var.multi_az
@@ -18,6 +18,8 @@ resource "aws_db_instance" "standard" {
   skip_final_snapshot = true
 
   tags = var.tags
+
+  depends_on = [ data.aws_secretsmanager_secret_version.db-rds ]
 }
 
 resource "aws_db_parameter_group" "standard" {

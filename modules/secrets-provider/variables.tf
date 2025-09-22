@@ -30,7 +30,7 @@ variable "db_name" {
   type        = string
 }
 
-variable "enable_platform" {
-  type    = bool
-  default = false
+variable "tags" {
+  type    = map(string)
+  default = {}
 }

@@ -1,12 +1,13 @@
 locals {
   tags = {
-    Environment = "db-module"
+    Environment = "final-project"
     Project     = "goit-devops"
   }
+  region = "eu-north-1"
 }
 
 provider "aws" {
-  region = "eu-north-1"
+  region = local.region
 }
 
 module "vpc" {
@@ -31,40 +32,21 @@ module "eks" {
   cluster_name  = "eks-cluster-${local.tags.Environment}"
   subnet_ids    = module.vpc.private_subnets
   instance_type = "t3.medium"
-  desired_size  = 1
+  desired_size  = 2
   max_size      = 3
   min_size      = 1
   tags          = local.tags
 }
 
-module "rds" {
-  source = "./modules/rds"
-
-  name                  = "${local.tags.Environment}-db"
-  use_aurora            = false
-  aurora_instance_count = 2
-
-  # --- RDS-only ---
-  engine                     = "postgres"
-  engine_version             = "17.2"
-  parameter_group_family_rds = "postgres17"
-
-  # Common
-  instance_class          = "db.t3.medium"
-  allocated_storage       = 20
-  db_name                 = "myapp"
-  username                = "postgres"
-  password                = "admin123AWS23"
-  subnet_private_ids      = module.vpc.private_subnets
-  subnet_public_ids       = module.vpc.public_subnets
-  publicly_accessible     = true
-  vpc_id                  = module.vpc.vpc_id
-  multi_az                = true
-  backup_retention_period = 7
-  parameters = {
-    max_connections            = "200"
-    log_min_duration_statement = "500"
-  }
+module "secrets_provider" {
+  count           = var.enable_platform ? 1 : 0
+  source          = "./modules/secrets-provider"
+  db_name         = var.db_name
+  db_username     = var.db_username
+  db_password     = var.db_password
+  github_pat      = var.github_pat
+  github_user     = var.github_user
+  github_repo_url = var.github_repo_url
 
   tags = local.tags
 }
@@ -97,35 +79,94 @@ provider "helm" {
   }
 }
 
-module "jenkins" {
-  source            = "./modules/jenkins/"
+module "secrets_consumer" {
+  count             = var.enable_platform ? 1 : 0
+  source            = "./modules/secrets-consumer"
   cluster_name      = module.eks.eks_cluster_name
   oidc_provider_arn = module.eks.oidc_provider_arn
   oidc_provider_url = module.eks.oidc_provider_url
-  github_pat        = var.github_pat
-  github_user       = var.github_user
-  github_repo_url   = var.github_repo_url
+  aws_region        = local.region
+
+  secret_arns = [
+    module.secrets_provider[0].db_secret_arn,
+    module.secrets_provider[0].github_secret_arn
+  ]
 
   providers = {
     helm       = helm.eks
     kubernetes = kubernetes.eks
   }
 
+  tags = local.tags
+
   depends_on = [module.eks]
+}
+
+module "rds" {
+  count  = var.enable_platform ? 1 : 0
+  source = "./modules/rds/"
+
+  name                  = "${local.tags.Environment}-db"
+  use_aurora            = false
+  aurora_instance_count = 2
+
+  # --- RDS-only ---
+  engine                     = "postgres"
+  engine_version             = "17.2"
+  parameter_group_family_rds = "postgres17"
+
+  # Common
+  instance_class          = "db.t3.medium"
+  allocated_storage       = 20
+  db_secret_arn           = module.secrets_provider[0].db_secret_arn
+  subnet_private_ids      = module.vpc.private_subnets
+  subnet_public_ids       = module.vpc.public_subnets
+  publicly_accessible     = true
+  vpc_id                  = module.vpc.vpc_id
+  multi_az                = true
+  backup_retention_period = 7
+  parameters = {
+    max_connections            = "200"
+    log_min_duration_statement = "500"
+  }
+
+  tags = local.tags
+
+  depends_on = [module.secrets_provider[0]]
+}
+
+module "jenkins" {
+  count                     = var.enable_platform ? 1 : 0
+  source                    = "./modules/jenkins/"
+  cluster_name              = module.eks.eks_cluster_name
+  oidc_provider_arn         = module.eks.oidc_provider_arn
+  oidc_provider_url         = module.eks.oidc_provider_url
+  cluster_secret_store_name = module.secrets_consumer[0].cluster_secret_store_name
+
+  providers = {
+    helm       = helm.eks
+    kubernetes = kubernetes.eks
+  }
+
+  depends_on = [module.eks, module.secrets_consumer[0]]
 
   tags = local.tags
 }
 
 module "argo_cd" {
-  source        = "./modules/argo-cd/"
-  namespace     = "argocd"
-  name          = "argo-cd"
-  chart_version = "5.46.4"
-  github_pat    = var.github_pat
-  github_user   = var.github_user
+  count                     = var.enable_platform ? 1 : 0
+  source                    = "./modules/argo-cd/"
+  namespace                 = "argocd"
+  name                      = "argo-cd"
+  chart_version             = "5.46.4"
+  db_host                   = module.rds[0].db_host
+  app_image_repo            = module.ecr.repository_url
+  cluster_secret_store_name = module.secrets_consumer[0].cluster_secret_store_name
 
   providers = {
     helm       = helm.eks
     kubernetes = kubernetes.eks
   }
+
+  depends_on = [module.eks, module.secrets_consumer[0]]
 }

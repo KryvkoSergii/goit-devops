@@ -16,14 +16,16 @@ variable "chart_version" {
   default     = "5.46.4" 
 }
 
-variable "github_pat" {
-  description = "GitHub Personal Access Token"
-  type        = string
-  sensitive = true
+variable "db_host" {
+  description = "DB host for client connetion"
+  type = string
 }
 
-variable "github_user" {
-  description = "GitHub username"
-  type        = string
-  sensitive = true
+variable "app_image_repo" {
+  description = "App image repo"
+  type = string
+}
+
+variable "cluster_secret_store_name" {
+  type = string
 }
